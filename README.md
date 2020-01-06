@@ -2,6 +2,8 @@
 
 [![Watch the video](https://youtu.be/IcBoE3KHGwQ/maxresdefault.jpg)](https://youtu.be/IcBoE3KHGwQ)
 
+<iframe width="638" height="534" src="https://www.youtube.com/embed/IcBoE3KHGwQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 If you use our code in academic work, please cite our [paper](https://arxiv.org/pdf/1609.00881.pdf):
 
 ```
