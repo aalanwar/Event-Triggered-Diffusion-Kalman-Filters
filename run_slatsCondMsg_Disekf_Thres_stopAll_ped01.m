@@ -69,7 +69,7 @@ Q = nm.getProcessVar();
 P = nm.getInitialVar();
 
 %% Save as movie
-SAVEMOVIE = true;
+SAVEMOVIE = false;
 if SAVEMOVIE
     vidObj = VideoWriter('video/mocap.avi');
     vidObj.FrameRate=20;
