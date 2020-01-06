@@ -4,13 +4,16 @@ Watch the video
 [![Watch the video](https://img.youtube.com/vi/IcBoE3KHGwQ/0.jpg)](https://youtu.be/IcBoE3KHGwQ)
 
 This video is for localizing a Quadrotor in 9x10m lab. The used algorithm is Event-Triggered Diffusion Kalman Filter. The rectangular is the Quadrotor real position using the Motion Capture system. The red plus is the estimated positions of the Quadrotor. The ellipses are based on the diffusion error covariance matrix.  
-The used threshold is 1. To regenerate the video:
-1- run "run_slatsCondMsg_Disekf_Thres_stopAll_ped01.m" which runs based on the real data on log ped01 in the logs folder
-2- Choose the list of threshold in line 4. "for ii=1", currently it is 1 only.
-3- set
+The used threshold is 1. To regenerate the videe, follow these steps:
+
+1- run "run_slatsCondMsg_Disekf_Thres_stopAll_ped01.m" which runs based on the real data on log ped01 in the logs folder <br /> 
+2- Choose the list of threshold in line 4.<br />
+"for ii=1", currently it is 1 only.<br />
+3- set<br />
 SAVEMOVIE = true;
 at line 72
 to save the generated movie under the video folder.
+
 
 
 
