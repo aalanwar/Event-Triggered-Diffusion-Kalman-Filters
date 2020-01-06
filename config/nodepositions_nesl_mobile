@@ -1,0 +1,9 @@
+ntb-alpha,   0, -3.817, 2.416, 2.296, static
+ntb-bravo,   1, 1.062, 2.381, 2.308, static
+ntb-charlie, 2, 0.986, 2.434, -3.173, static
+ntb-delta,   3, -3.852, 2.434, -3.163, static
+ntb-echo,    4, -1.368, 2.402, 0.486, static
+ntb-foxtrot, 5, -1.349, 2.431, -1.323, static
+ntb-golf,    6, -2.413, 0.796, -1.366, static
+ntb-hotel,   7, -3.282, 0.738, 4.009, static
+ntb-mobile,  10, 0, 0, 0, mobile
