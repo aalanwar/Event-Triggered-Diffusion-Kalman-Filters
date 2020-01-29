@@ -15,10 +15,7 @@ classdef Node < handle
         % corresponding rigid body id, if needed
         rigidbody_id = [];
         
-% state estimation variables
-%         state_p = [0;0;0];
-%         state_clkofst = 0;
-%         state_clkbias = 0;
+
 %         
          state_p = [0;0;0];
          state_clkofst = 0;
@@ -29,9 +26,8 @@ classdef Node < handle
         % by default a node is static with no var on position
         var_p = [0; 0; 0];%[0.0; 0.0; 0.0];
         var_co = 10e-12; % was 1e-15
-        %var_co = 1e-20;
         % clock bias experimentally drifts as much as +/- 2.0 ns / sec
-        var_cb = 1.00; % ??????
+        var_cb = 1.00; %
         
         % --- initial variances --- initial P
         % initial position variance, dependent on area size
@@ -39,12 +35,7 @@ classdef Node < handle
         vari_cb = 1;
         % clock offset is uniform [0,17] roughly, or 24 var
         vari_co = 1e-3;
-        vari_p_red = [5; 5; 5];
-        vari_p_node1_red = [1e-14; 1e-14; 1e-14 ];
-        vari_co_red = 1e-3;
-        vari_co_node1_red = 1e-14;
-        vari_cb_red = 1;
-        vari_cb_node1_red = 1;
+
 
         % initial bias could be as high as +/- 2ppm - +/- 2ppm = +/-4ppm (uniform)
         
@@ -69,8 +60,7 @@ classdef Node < handle
         eital;
         nodeIndex;
         Pl;
-        eita_red;
-        Q_red;
+
         c=[0.1;0.3;0.1;0.3;0.1;0.1];
         P_next;
         x_next;
@@ -86,8 +76,6 @@ classdef Node < handle
         myneigh=[];
         ekf_p1_done =0;
         ekf_p2_done =0;
-        ready_to_ukf_p1 =0;
-        ready_to_ukf_p2 =0;
         ukf_p1_done =0;   
         X_min;
     end
@@ -102,9 +90,6 @@ classdef Node < handle
         % make this a mobile node
         function setToMobile(obj)
             obj.mobile = true;
-           % obj.var_p = [0.2; 0.2; 0.2];
-          %obj.var_p = [0.1; 0.1; 0.1];
-          % obj.var_p = [0.01; 0.01; 0.01];
            obj.var_p = [1; 1; 1];
         end
         
@@ -239,20 +224,6 @@ classdef Node < handle
             obj.vari_co = 1e-14 ;
             obj.var_cb = 1e-14 ;
             obj.vari_cb = 1e-14 ;
-%             obj.vari_p = [1e-20; 1e-20; 1e-20 ];
-%             obj.var_co = 1e-20 ;
-%             obj.vari_co = 1e-20 ;
-%             obj.var_cb = 1e-20 ;
-%             obj.vari_cb = 1e-20 ;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%             obj.state_clkofst = 0;
-%             obj.state_clkbias = 0 ;
-%             obj.vari_p = [0; 0;0 ];
-%             obj.var_co = 0;
-%             obj.vari_co = 0 ;
-%             obj.var_cb = 0 ;
-%             obj.vari_cb = 0 ;
-
             obj.is_reference = true;
             
         end
@@ -306,28 +277,7 @@ classdef Node < handle
             end
         end
   
-       function set_meas_red(obj,meas,h)
-            
-
-           desID = meas.getDestId;
-           if ~any(obj.x_order_red == desID +1)  %it is a new msg from this neighbour
-               obj.yl{obj.fill_index} = meas.vectorize();
-               obj.x_order_red(obj.fill_index) = desID+1;
-               obj.Rl{obj.fill_index} = meas.getCovariance();
-               obj.hl{obj.fill_index} = h;
-               obj.Rx(obj.fill_index) = 1; %available y's and Rl
-               
-               obj.fill_index = obj.fill_index +1;
-               for i =1:length(obj.Rx)
-                   if( obj.Rx(i) ==0 )
-                       break; %not ready yet
-                   end
-                   if(i == length(obj.Rx))
-                       obj.ready_to_ekf_p1 =1;
-                   end
-               end
-           end
-        end
+     
 
         
         function checkekf_p1(obj)
@@ -347,15 +297,6 @@ classdef Node < handle
                 obj.measUpdateFlag=1;
             end
         end        
-        function checkukf_p1(obj,M,alpha,bita,kk,delta)
-          if obj.id ==2
-               obj.id;
-           end
-            if(obj.ready_to_ekf_p1 == 1 && obj.ekf_p1_done ==0)
-                [obj.X_min,obj.eita,obj.P]=dif_ukf_p1(obj.x,obj.P,obj.hl,obj.Rl,obj.yl,M,alpha,bita,kk,delta);
-                obj.ekf_p1_done=1;
-            end
-        end
         
         function init_x_P(obj,x,P)
            obj.x=x;
@@ -366,25 +307,6 @@ classdef Node < handle
            obj.P_i_i=P;
         end
         
-        function init_x_P_red(obj)
-           obj.x=[]; 
-           obj.P =[];
-           for i = 1:length(obj.myneigh)
-               %all of them start from the same x , p
-               %obj.x=[obj.x ; obj.getState()];
-               %obj.P = [obj.P; obj.getInitialVar()];
-               if i == 1
-                   obj.x=[obj.x ; obj.getState()];
-                   obj.P = [obj.P; obj.vari_p_node1_red; obj.vari_co_node1_red; obj.vari_cb_node1_red];
-                   
-               else
-                   obj.x=[obj.x ; obj.getState()];
-                   obj.P = [obj.P; obj.vari_p_red; obj.vari_co_red; obj.vari_cb_red];
-                   
-               end
-           end
-            obj.P = diag(obj.P);
-        end
             
         function checkekf_p2(obj,fstate,Q,diffEnable)
             if(obj.ready_to_ekf_p2 == 1 )
@@ -402,11 +324,7 @@ classdef Node < handle
             end
         end
 
-      function checkekf_p2_red(obj,fstate,Q)
-          if(obj.ready_to_ekf_p2 == 1)
-              obj.efk_part2_red(fstate,Q);
-          end
-      end
+
         
 
       
@@ -427,19 +345,11 @@ classdef Node < handle
           end
         end
 
-       function seteital_red(obj,eita_red)
-            obj.eital{obj.eita_index}= eita_red;
-            if obj.eita_index == length(obj.Rx)
-                obj.ready_to_ekf_p2 =1;
-                %efk_part2(obj,Q,fstate)
-            end
-            obj.eita_index = obj.eita_index +1;
-       end
+
         
         function reseteital(obj)
             obj.eital={};
             obj.Pl={};
-            obj.eita_red=[];
             obj.yl={};
             obj.Rl={};
             obj.Rx=zeros(1,obj.size_R);
@@ -462,17 +372,7 @@ classdef Node < handle
            obj.P_i_i= obj.P;
         end
         
-        function efk_part1_fake(obj)
-          %  [obj.eita,obj.P]=dif_ekf_p1(obj.x,obj.P,obj.hl,obj.Rl,obj.yl);
-          obj.eita = obj.x;
-           obj.P_i_i= obj.P;
-        end        
-        
-       function efk_part1_red(obj)
-           % size(obj.x)
-            [obj.eita,obj.P]=dif_ekf_p1_red(obj.id+1,obj.x,obj.P,obj.hl,obj.Rl,obj.yl);
-       end
-        
+
        function efk_part2(obj,fstate,Q,diffEnable)
            
            if(diffEnable)
@@ -528,11 +428,7 @@ classdef Node < handle
            %end
            % obj.reseteital();
         end
-        function ukf_part3(obj,fstate,M,alpha,bita,kk,delta)
-           [obj.P,obj.x]=dif_ukf_p3(fstate ,obj.P,obj.x,M,alpha,bita,kk,delta,obj.X_min);
-            obj.state_ready =1;
-            obj.reseteital();
-        end        
+     
         %%%% network topology 
         function setmyneigh(obj,neigh)
             obj.myneigh=neigh;
@@ -541,53 +437,10 @@ classdef Node < handle
                obj.c(i)=1/length(neigh);
             end
         end
-%  
-%          function setmyneigh_try(obj,neigh)
-%             obj.myneigh=neigh;
-%             obj.c = zeros(1,length(neigh));
-%             obj.c(obj.id+1) =1;
-%          end
+
         
-        function checkekf_p1_red(obj,size)
-            if(obj.ready_to_ekf_p1 == 1)
-                obj.efk_part1_red();
-                obj.formateita_red(size);
-            end
-        end
-        
-        function formateita_red(obj,size)
-            obj.eita_red=zeros(size*5,1);
-            index=0;
-            for i=obj.myneigh
-                obj.eita_red((i-1)*5+1) = obj.eita(index+1);
-                obj.eita_red((i-1)*5+2) = obj.eita(index+2);
-                obj.eita_red((i-1)*5+3) = obj.eita(index+3);
-                obj.eita_red((i-1)*5+4) = obj.eita(index+4);
-                obj.eita_red((i-1)*5+5) = obj.eita(index+5);
-                index = index +5;
-            end
-        end
-        
-        
-        %%set measurement from my neighbours
-%         function set_meas_nt(obj,meas,h)
-% 
-%             obj.yl{obj.fill_index} = meas.vectorize();
-%             obj.Rl{obj.fill_index} = meas.getCovariance();
-%             obj.hl{obj.fill_index} = h;
-%             obj.Rx(obj.fill_index)=1; %available y's and Rl
-%             obj.fill_index = obj.fill_index +1;
-%             
-%             for i =1:length(obj.Rx)
-%                 if( obj.Rx(i) ==0 )
-%                     break; %not ready yet
-%                 end
-%                 if(i == length(obj.Rx))
-%                     obj.ready_to_ekf_p1 =1;
-%                 end
-%             end
-%             
-%         end
+
+
     end
 end
 

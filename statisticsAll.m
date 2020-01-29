@@ -1,9 +1,13 @@
 clear all
-close all
+%close all
 %reporterr = [ PDESIRED,mean(err3d),std(err3d),rms(err3d),mean(p_errors(:,2)), sqrt( mean( p_errors(:,2).^2 ) ),mean(p_errors(:,3)), sqrt( mean( p_errors(:,3).^2 ) ),mean(p_errors(:,4)), sqrt( mean( p_errors(:,4).^2 ) )]
 % reportmsg = [PDESIRED,savemsgsM,sentmsgsM,sentmsgsD]
-%filepath = 'cache\reports\Report_ped0';
-filepath = 'cache2ndRun\reports\Report_ped0';
+connected =0;
+if connected ==1
+    filepath = 'cache\reports\Report_conn_ped0';
+else
+    filepath = 'cache\reports\Report_notconn_ped0';
+end
 ID = 1;
 load(strcat(filepath,num2str(ID)));
 reporterr_ped01= reporterr_aggregated;
@@ -37,7 +41,7 @@ load(strcat(filepath,num2str(ID)));
 reporterr_ped03= reporterr_aggregated;
 reportmsg_ped03= reportmsg_aggregated;
 % prepare percentage!
-%SOME bug AT THRESHOLD ZERO !, AS IF YOU TRY reportmsg_ped03(:,2) +reportmsg_ped03(:,3)
+% bug AT THRESHOLD ZERO !, AS IF YOU TRY reportmsg_ped03(:,2) +reportmsg_ped03(:,3)
 % YOU WILL SEE IT IS CONSTANT
 %QUICK FIX
 reportmsg_ped03(1,3)=reportmsg_ped03(2,2) +reportmsg_ped03(2,3);
@@ -65,8 +69,7 @@ reportmsg_perc_ped04(:,3) = reportmsg_perc_ped04(:,3)/totalNumMsg4;
 
 
 
-%reporterr = ( 5/10 *reporterr_ped01 +  4/10 *reporterr_ped02 + 0.5/10*reporterr_ped03 + 0.5/10*reporterr_ped04);
-reporterr = ( 7/10 *reporterr_ped01 +  2/10 *reporterr_ped02 + 0.5/10*reporterr_ped03 + 0.5/10*reporterr_ped04);
+reporterr = ( reporterr_ped01 +  reporterr_ped02 + reporterr_ped03 + reporterr_ped04)/4;
 reportmsg = (reportmsg_perc_ped01 + reportmsg_perc_ped02 +reportmsg_perc_ped03 +reportmsg_perc_ped04)/4;
 totalNumMsg = totalNumMsg1 + totalNumMsg2 +totalNumMsg3 +totalNumMsg4
 %reporterr = (reporterr_ped01 + reporterr_ped02  )/2;

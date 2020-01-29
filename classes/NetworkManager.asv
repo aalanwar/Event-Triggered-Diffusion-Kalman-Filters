@@ -975,6 +975,7 @@ classdef NetworkManager < handle
             end
         end
         
+
         
         function RunMeasFlag= checkekf_p1_forall(obj,dt_ref,meas)
             for i=1:length(obj.nodes)
@@ -1073,7 +1074,22 @@ classdef NetworkManager < handle
         end
         
         
-
+        function publishmeas_forneigh_red(obj,meas,h)
+            srcIndex=meas.getSourceId() +1;
+            desIndex=meas.getDestId() +1;
+            
+            %check if the measuremnt is between neighbours
+            % if not just discard it
+            if( any(obj.network{srcIndex}==desIndex) )
+                for i =obj.network{srcIndex}
+                    %send the need msg only to the nei
+                    % the meas must be between nei of my nei
+                    %if(any(obj.network{i}==srcIndex) && any(obj.network{i}==desIndex))
+                    obj.nodes{i}.set_meas(meas,h);
+                    %end
+                end
+            end
+        end
         function calcPropDelaytoAlpha(obj)
             for i=1:length(obj.nodes)-1
                 obj.propdelay2alpha(i)= norm( obj.nodes{1}.true_p- obj.nodes{i+1}.true_p )/obj.LIGHTSPEED;
@@ -1097,7 +1113,111 @@ classdef NetworkManager < handle
             end
         end
         
- 
+        % state process function
+        function snew = processFcn_red(obj, s, dt)
+            snew = s;
+            %srcIndex=meas.getSourceId() +1;
+            
+            % perform process update over each node separately
+            stateSize = 5;
+            i = 1;
+            for n=size(s)/5
+                snew(i+3) = s(i+3) + s(i+4) * 1e-9 * dt;
+                i = i + stateSize;
+            end
+        end
+        %   network= { [1 2 3 ],[ 1 2 3 ],[ 1 2 3 4],[3 4 5],[4 5 6],[5 6 7],[6 7 8],[1 2 3 4 5 6 7 8]};
+        function y = measurementFcn_red(obj,s,meas,nodeIdx )
+            type = meas.getType();
+            
+            srcIdx = obj.getNodeIdx(meas.getSourceId());
+            dstIdx = obj.getNodeIdx(meas.getDestId());
+            
+            % find state indices for nodes with index i and j
+            stateSize = 5;
+            start_i = (srcIdx-1)*stateSize + 1;
+            start_j = (dstIdx-1)*stateSize + 1;
+            
+            for i=1:length(obj.nodes)
+                %if the node is not in the negh, then take out 5
+                if( ~any(i==obj.network{nodeIdx}) && srcIdx >= i  )  %&& i < max(obj.network{srcIdx})
+                    start_i = start_i -5;
+                end
+                if( ~any(i==obj.network{nodeIdx}) && dstIdx >= i ) %&& dstIdx > i
+                    start_j = start_j -5;
+                end
+            end
+            
+            % extract the needed state info
+            pi = s(start_i:(start_i+2));
+            pj = s(start_j:(start_j+2));
+            oi = s(start_i+3);
+            oj = s(start_j+3);
+            bi = s(start_i+4);
+            bj = s(start_j+4);
+            
+            % predicted measurement y
+            % format: y = [d_ij; r_ij; B_ij; R_ij];
+            y = [];
+            
+            c = obj.LIGHTSPEED;
+            
+            % d_ij = range/speed_of_light + offset
+            if obj.filter_meas_d
+                if obj.enable_slats
+                    y = [y; ( sqrt(sum((pj-pi).^2)) + 2.0 )/c + (oj - oi)];
+                    
+                else
+                    y = [y; (oj - oi)];
+                end
+            end
+            
+            % type 1 only has offset
+            if type == 1
+                return;
+            end
+            
+            % r_ij = range + t_error
+            if obj.filter_meas_r
+                if obj.enable_slats
+                    y = [y; sqrt(sum((pj-pi).^2)) + (c*meas.T_rsp1/2)*(bj - bi)*1e-9];
+                else
+                    y = [y; sqrt(sum((pj-pi).^2))];
+                end
+            end
+            
+            % type 2 only has offset and noisy range
+            if type == 2
+                return;
+            end
+            
+            % R_ij = range + t_error
+            if obj.filter_meas_R
+                if obj.enable_slats
+                    err = c*( 1e-9*(bi-bj)*(meas.T_rnd0*meas.T_rnd1 - meas.T_rsp0*meas.T_rsp1 ))/( (1+ 1e-9*(bi-bj))*meas.T_rnd0 + meas.T_rnd1 + meas.T_rsp0 + (1+ 1e-9*(bi-bj))*meas.T_rsp1 );
+                    y = [y; sqrt(sum((pj-pi).^2)) + err ];
+                else
+                    y = [y; sqrt(sum((pj-pi).^2))];
+                end
+            end
+        end
+        % get process variance
+        function Q = getProcessVar_red(obj)
+            Q = [];
+            for i=1:length(obj.nodes)
+                Q = [Q; obj.nodes{i}.getProcessVar()];
+            end
+            Q= diag(Q);
+        end
+        
+        % get initial variance
+        function P = getInitialVar_red(obj)
+            p = [];
+            for i=1:length(obj.nodes)
+                p = [p; obj.nodes{i}.getInitialVar()];
+            end
+            P = diag(p);
+        end
         
         function sendP(obj)
             P = obj.nodes{9}.P;
@@ -1245,7 +1365,12 @@ classdef NetworkManager < handle
             
         end
         
-
+        %        P_mobile=P_old(45*8+1:end,45*8+1:end);
+        % MOBILEID = 10;
+        %         mobIdx = obj.getNodeIdx( MOBILEID )
+        %         stateIdx = (mobIdx-1)*5 + 1
+        %         Pi = P_mobile(stateIdx:(stateIdx+2), stateIdx:(stateIdx+2))
+        %  avg_trace = trace(Pi)/3
         function P=getCov(obj,meas,P_old,dt_ref)
             %If A is an m × n matrix and B is a p × q matrix,
             %then the Kronecker product A ? B is the mp × nq block matrix
@@ -1527,6 +1652,14 @@ classdef NetworkManager < handle
                
                 obj.cov_big =  CovTermOne + CovTermTwo;
                 
+                %%%%%%%%%%%%%%%%%%%
+%                 temp = [];
+%                 for i=1:obj.getNumNodes()
+%                     temp = [ temp ;  ctranspose(H_{i}) * R_single^-1* H_{i}];
+%                 end
+%                 PTermOne = P_minus_mat ;
+%                 PTermTwo =  L_latin' * temp;
+%                 obj.P_big = ( PTermOne +PTermTwo )^-1 ;
                 obj.P_big = P_mat;
                 
                 
@@ -1561,7 +1694,39 @@ classdef NetworkManager < handle
             end
         
         end
-      
+        
+%         %just a fake one
+%         function RunFlag=TimePCovUpdateUncon(obj,dt_ref)
+%             iamReady=1;%assume they are ready
+%             for i=1:length(obj.nodes)
+%                 if obj.nodes{i}.timeUpdateFlag ==0
+%                     iamReady=0; % some one is not ready :(
+%                 end
+%             end
+%             RunFlag=0;
+%             if iamReady ==1
+%                 RunFlag=1;
+%                 numofnodes=9;
+%                 numofstates=5;
+%                 M=numofnodes*numofstates;
+%                 X = [obj.nodes{1}.x_i_i;obj.nodes{2}.x_i_i;obj.nodes{3}.x_i_i;obj.nodes{4}.x_i_i;obj.nodes{5}.x_i_i;obj.nodes{6}.x_i_i;obj.nodes{7}.x_i_i;obj.nodes{8}.x_i_i;obj.nodes{9}.x_i_i];
+%                 fstate= @(X) obj.processExtendedFcn(X, dt_ref);
+%                 [f, F]= obj.jaccsd(fstate,X);
+%                 onesVec=ones(numofnodes,1);
+%                 Q = obj.getProcessVar();
+%                 G=eye(numofnodes*numofstates);
+%                 % FF = kron(eye(numofnodes),F);
+%                    
+%                 %GG = kron(onesVec,G);
+%                 GG = kron(onesVec,G);
+%                 obj.cov_big = F*obj.cov_big * ctranspose(F) + GG*Q*ctranspose(GG);
+%                 obj.P_big = F*obj.P_big * ctranspose(F) + GG*Q*ctranspose(GG);
+%                 for i=1:length(obj.nodes)
+%                     obj.nodes{i}.timeUpdateFlag =0;
+%                 end
+%             end
+%         end
+%     end       
         
         function RunFlag=TimePCovUpdate(obj,dt_ref)
             iamReady=1;%assume they are ready
@@ -1582,6 +1747,9 @@ classdef NetworkManager < handle
                 onesVec=ones(numofnodes,1);
                 Q = obj.getProcessVar();
                 G=eye(numofnodes*numofstates);
+                % FF = kron(eye(numofnodes),F);
+                   
+                %GG = kron(onesVec,G);
                 GG = kron(onesVec,G);
                 obj.cov_big = F*obj.cov_big * ctranspose(F) + GG*Q*ctranspose(GG);
                 obj.P_big = F*obj.P_big * ctranspose(F) + GG*Q*ctranspose(GG);
