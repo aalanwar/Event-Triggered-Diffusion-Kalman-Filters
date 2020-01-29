@@ -9,7 +9,7 @@ This video is for localizing a Quadrotor in 9x10m lab. The used algorithm is Eve
 The used threshold is one for event-triggerred algorithm. 
 
 To regenerate the video, follow these steps:<br />
-1- run the main file "run_slatsCondMsg_Disekf_Thres_stopAll_ped01.m" which runs based on the real data at log ped01 in the logs folder <br /> 
+1- run the main file "run_event_DEKF.m" which runs based on the real data at log ped01 in the logs folder <br /> 
 2- Choose the list of threshold in line 4.<br />
 "for ii=1", currently it is 1 only.<br />
 3- set<br />
