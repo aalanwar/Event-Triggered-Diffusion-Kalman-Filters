@@ -6,7 +6,7 @@
 %loop over the following values of threshold in the paper
 % each threshold value (run) will generate mat file with the results under
 % the cache folder
-for ii=2.5
+for ii=1 
 clc; close all ;
 keepvars = {'ii'};
 clearvars('-except', keepvars{:});
@@ -237,17 +237,13 @@ while (t_last - t_start) < t_stop
   if avg_pDKAL > PDESIRED
         bestNode = -1;
         bestP = 0;
-        % pubish y to neighbors
         nm.publishmeas_forneigh(meas,h);
-        % if a node got the y's from all its neighbors, then run
-        % measurement update step
         RunMeasFlag = nm.checkekf_p1_forallUnconn( );
-        % publish eita (epsi) to prepare for the diffusion step
         nm.publisheita_forneigh();
         %[RunDiffFlag,RunTimeFlag]= nm.checkekf_p2_forall(f,dt_ref*Q ,diffEnable,dt_ref);
-        %check if the node is ready for diffusion step
         [RunDiffFlag,RunTimeFlag]= nm.checkekf_p2_forallUnconn(f,dt_ref*Q ,diffEnable);
-
+        % send a RIJ measurement to mobile node
+        %cov_big=nm.getCov(meas,cov_big,dt_ref) ;
         timeUpdateFlag_history = [timeUpdateFlag_history RunTimeFlag];
         DiffFlag_history = [DiffFlag_history RunDiffFlag];
         MeasFlag_history = [MeasFlag_history RunMeasFlag];
@@ -347,8 +343,7 @@ sentmsgsD=nm.sentmsgsD;
 sentmsgsM=nm.sentmsgsM;
 % save data
 
-%saveName= strcat('cache\',logname,'_th_',num2str(PDESIRED));
-saveName ='cache\temp';
+saveName= strcat('cache\',logname,'_th_',num2str(PDESIRED));
 save(saveName,'savemsgsM','sentmsgsD','sentmsgsM', 'nm', 'k', 's_history', 'p_history', 'cov_history','pDKAL_history','P_big_history' ,'t_history','PDESIRED','t_stop','timeUpdateFlag_history' ,'DiffFlag_history','MeasFlag_history');
 
 end

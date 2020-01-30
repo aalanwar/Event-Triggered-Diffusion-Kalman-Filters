@@ -315,6 +315,7 @@ classdef Node < handle
                 obj.reseteital();
                 %obj.ekf_p2_done =1;
             end
+            %time update step
              ekf_part3(obj,Q,fstate);
         end
 
