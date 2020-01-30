@@ -1,32 +1,5 @@
 function [P_next,x_next]=dif_ekf_p3(fstate ,P,Q,G,x)
-% diffusion Kalman
-%   Detailed explanation goes here
-% [ h H_cap]= jaccsd(hmeas,x);
-% Rl=H_cap*P*transpose(H_cap)+Rl;
-% sum=0;
-% for i=1:l
-%   sum = sum + transpose(H_cap)*(Rl^-1)*H_cap;
-% end
-% %sum = sum + P^-1;
-% %P_next=sum^-1;
-% 
-% sum =  P+P*sum*P;
-% P_next=sum;
-% 
-% 
-% %-- eita
-% sum=0;
-% for i=1:l
-%   sum = sum + transpose(H_cap)*Rl^-1*( yl(:,i) - h);
-% end
-% eita = P_next*sum + x;
 
-%-- Diffusion update
-
-% x =0;
-% for i =1:l
-%     x = x+eital{i}*c(i) ;
-% end
 %-- Time update --%
 [f, F_bar]= jaccsd(fstate,x);
 u = f - F_bar*x;

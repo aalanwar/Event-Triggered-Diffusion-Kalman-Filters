@@ -2,31 +2,7 @@ function [eita,P_next]=dif_ekf_p1(x,P,hmeas,Rl,yl)
 % diffusion Kalman
 %   Detailed explanation goes here
 
-% pmin_p = [0.001; 0.001; 0.001];
-% pmin_o = 1e-13;
-% pmin_b = 0.4;
-% Pmin_vec = [0;0;0;0;0];
-% for i=2:length(node_ids)
-%     Pmin_vec = [Pmin_vec; [pmin_p; pmin_o; pmin_b]];
-% end
-% Pmin = diag(Pmin_vec);
-%Rl=H_cap*P*transpose(H_cap)+Rl;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%try without inverse
-% Re =0;
-% for i=1:length( Rl)
-%     [ h, H_cap]= jaccsd(hmeas{i},x);
-%    Re = Re + Rl{i} + H_cap*P*conj(H_cap)';
-% end
 
-% sum =0;
-% for i=1:length( Rl)
-%     [ h, H_cap]= jaccsd(hmeas{i},x); 
-%     Re = Rl{i} + H_cap*P*conj(H_cap)';
-%     P = P - P*conj(H_cap)'*( Re^-1)*H_cap*P;
-% end
-% P_next = P ;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 P_minus = P;
 sum=0;
 for i=1:length( Rl)
@@ -63,13 +39,7 @@ for i=1:length( Rl)
 end
 eita = P_next*sum + x;
 
-% %-- Diffusion update
-% x = eita;
-% %-- Time update
-% [f F_bar]= jaccsd(fstate,x);
-% u = f - F_bar*x;
-% x_next = F_bar*x + u;
-% P_next = F_bar*P_next*transpose(F_bar) + G*Q*transpose(G);
+
 
 end
 

@@ -17,7 +17,7 @@ else
 end
 %% Load saved SLATS data
 index =1;
-logname = 'ped04';
+logname = 'ped01';
 for jj= 0:10
  
      

@@ -11,7 +11,8 @@ To regenerate the video, follow these steps:<br />
 1- run the main file "run_event_DEKF.m" which runs based on the real data at log ped01 in the logs folder <br /> 
 3- To save the movie, set<br />
 SAVEMOVIE = true; 
-at to save the generated movie under the video folder.<br />4- This generates mat file (temp by default) under the cache folder. <br />5- run "plot_snapshot.m" to plot event-triggered localization results. This plots a figure close to the following figure
+at to save the generated movie under the video folder.<br />
+4- This generates mat file (temp by default) under the cache folder. <br />5- run "plot_snapshot.m" to plot event-triggered localization results. This plots a figure close to the following figure
 <img
 src="ImgsOut/temp.png"
 raw=true
@@ -19,14 +20,19 @@ alt="Subject Pronouns"
 style="margin-right: 10px;"
 />
 <br />
-
-The class folder has the main classes<br />
+<br />
+5- If you run "run_event_DEKF.m" for many thresholds and would like to get a figure showing the statiscs in Figure 7 and 8 in our [paper](https://arxiv.org/pdf/1609.00881.pdf), run Generate_reports.m over the the chosen thresholds then run statisticsAll.m.
+<br />
+<br />
+<br />
+<br />
+The class folder has the following main classes<br />
 1- DataParserROS.m: parses the log files.<br />
 2- Measurement.m: each measurement in the log file would make an object of this class<br />
 3- Node.m: every node would make an object of this class <br />
 4- NetworkManager.m: distributes the measurements and the estimates between nodes <br />
 
-Under the logs folder, you can find one folder for each scenario. For example, "ped01 " contains: <br />1- mocap.cvs: The ground truth location of a flying quadrotor <br /> 2- ntbtiming.cvs: The timing frames sent betweenthe nodes to calculate the relative distances. <br /> <br /> 
+Under the logs folder, you can find one folder for each scenario. For example, "ped01 " contains: <br />1- mocap.cvs: The ground truth location of a flying quadrotor <br /> 2- ntbtiming.cvs: The timing frames sent between the nodes to calculate the relative distances. <br /> <br /> 
 If you use our code in academic work, please cite our [paper](https://arxiv.org/pdf/1609.00881.pdf):
 
 ```
