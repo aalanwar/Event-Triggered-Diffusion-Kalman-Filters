@@ -36,23 +36,22 @@ Under the logs folder, you can find one folder for each scenario. For example, "
 If you use our code in academic work, please cite our [paper](https://arxiv.org/pdf/1609.00881.pdf):
 
 ```
-@misc{eventtriggered,
-    title={Event-Triggered Diffusion Kalman Filters},
-    author={Amr Alanwar and Hazem Said and Ankur Mehta and Matthias Althoff},
-    year={2020},
-    booktitle={ICCPS'20: ACM/IEEE 11th International Conference on Cyber-Physical Systems (with CPS Week 2020),
-    organization={IEEE Computer Society}
+@inproceedings{eventtriggered,
+Â  Â  title={Event-Triggered Diffusion Kalman Filters},
+Â  Â  author={Alanwar, Amr and Said, Hazem and Mehta, Ankur and Althoff, Matthias},
+Â  Â  year={2020},
+Â  Â  booktitle={Proceedings of the 11th ACM/IEEE International Conference on Cyber-Physical Systems},
 }
 ```
 The early version of this code was in the following work in collaboration with Dr. Paul Martin.
 
 ```
 @inproceedings{alanwar2017d,
-  title={D-slats: Distributed simultaneous localization and time synchronization},
-  author={Alanwar, Amr and Ferraz, Henrique and Hsieh, Kevin and Thazhath, Rohit and Martin, Paul and Hespanha, Joao and Srivastava, Mani},
-  booktitle={Proceedings of the 18th ACM International Symposium on Mobile Ad Hoc Networking and Computing},
-  pages={14},
-  year={2017},
-  organization={ACM}
+Â  title={D-slats: Distributed simultaneous localization and time synchronization},
+Â  author={Alanwar, Amr and Ferraz, Henrique and Hsieh, Kevin and Thazhath, Rohit and Martin, Paul and Hespanha, Joao and Srivastava, Mani},
+Â  booktitle={Proceedings of the 18th ACM International Symposium on Mobile Ad Hoc Networking and Computing},
+Â  pages={14},
+Â  year={2017},
+Â  organization={ACM}
 }
 ```
