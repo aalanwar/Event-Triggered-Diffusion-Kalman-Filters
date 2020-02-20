@@ -4,7 +4,7 @@ Watch the video <br />
 [![Watch the video](https://img.youtube.com/vi/IcBoE3KHGwQ/0.jpg)](https://youtu.be/IcBoE3KHGwQ)
 
 
-This video is for localizing a Quadrotor in 9x10m lab while saving the resources by using an event-triggered algorithm. The data and the code structure can be used for testing other estimation and localization algorithms.The used algorithm is Event-Triggered Diffusion Kalman Filter. The blue rectangular is the Quadrotor real position using the Motion Capture system which is used to get the ground-truth location of the Quadrotor. The red plus is the estimated position of the Quadrotor. The ellipses are based on the diffusion error covariance matrix. The complete experimental setup is shown in our [paper](https://arxiv.org/pdf/1609.00881.pdf). <br /><br />
+This video is for localizing a Quadrotor in 9x10m lab while saving the resources by using an event-triggered algorithm. The data and the code structure can be used for testing other estimation and localization algorithms.The used algorithm is Event-Triggered Diffusion Kalman Filter. The blue rectangular is the Quadrotor real position using the Motion Capture system which is used to get the ground-truth location of the Quadrotor. The red plus is the estimated position of the Quadrotor. The ellipses are based on the diffusion error covariance matrix. The complete experimental setup is shown in our [paper](https://arxiv.org/pdf/1711.00493.pdf). <br /><br />
 
 
 To regenerate the video, follow these steps:<br />
@@ -21,7 +21,7 @@ style="margin-right: 10px;"
 />
 <br />
 <br />
-5- If you run "run_event_DEKF.m" for many thresholds and would like to get a figure showing the statiscs in Figure 7 and 8 in our [paper](https://arxiv.org/pdf/1609.00881.pdf), run Generate_reports.m over the the chosen thresholds then run statisticsAll.m.
+5- If you run "run_event_DEKF.m" for many thresholds and would like to get a figure showing the statiscs in Figure 7 and 8 in our [paper](https://arxiv.org/pdf/1711.00493.pdf), run Generate_reports.m over the the chosen thresholds then run statisticsAll.m.
 <br />
 <br />
 <br />
@@ -33,7 +33,7 @@ The class folder has the following main classes<br />
 4- NetworkManager.m: distributes the measurements and the estimates between nodes <br />
 
 Under the logs folder, you can find one folder for each scenario. For example, "ped01 " contains: <br />1- mocap.cvs: The ground truth location of a flying quadrotor <br /> 2- ntbtiming.cvs: The timing frames sent between the nodes to calculate the relative distances. <br /> <br /> 
-If you use our code in academic work, please cite our [paper](https://arxiv.org/pdf/1609.00881.pdf):
+If you use our code in academic work, please cite our [paper](https://arxiv.org/pdf/1711.00493.pdf):
 
 ```
 @inproceedings{eventtriggered,
