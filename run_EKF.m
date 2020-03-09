@@ -162,8 +162,6 @@ t_start = meas1.getTime();
 t_last = t_start;
 k = 0;
 
-nm.setneigh_forall();
-nm.init_x_P_forall(nm.getState(),P);
 
 % plotting
 plot_delay = 0*0.100; % sec
@@ -228,7 +226,6 @@ while (t_last - t_start) < t_stop
                 [pTruStatic(i,3) pEstAll(i,2)],'zdata',[pTruStatic(i,4) pEstAll(i,3)]);
         end
         nidx = (i-1)*5 + 1;
-        Pi = nm.nodes{i}.P( nidx:(nidx+2), nidx:(nidx+2) );
         updateEllipse( hvar(i), [pEstAll(i,1); pEstAll(i,2); pEstAll(i,3)], Pi + 0.001*[1 0 0; 0 0 0; 0 0 1], varscale);
         if i == 3
             % Pi
@@ -275,7 +272,7 @@ sentmsgsM=nm.sentmsgsM;
 % save data
 
 
-saveName ='cache\temp';
+saveName ='cache/temp';
 save(saveName,'savemsgsM','sentmsgsD','sentmsgsM', 'nm', 'k', 's_history', 'p_history', 'cov_history','pDKAL_history','P_big_history' ,'t_history','PDESIRED','t_stop','timeUpdateFlag_history' ,'DiffFlag_history','MeasFlag_history');
 
 
