@@ -170,14 +170,13 @@ plot_last = t_start;
 tlast_twr = 0;
 period_twr = 5.00;
 
-PDESIRED =ii;
+
 MOBILEID = 10;
 
 if strcmp(logname,'ped03') || strcmp(logname,'ped04')
     MOBILEID = 8;
 end
 
-avg_pDKAL = PDESIRED +1;
 diffEnable = 1; % enable diffusion
 while (t_last - t_start) < t_stop
     k = k + 1;
