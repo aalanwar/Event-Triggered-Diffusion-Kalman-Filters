@@ -25,7 +25,7 @@ style="margin-right: 10px;"
 <br />
 <br />
 <br />
-To run the data set using traditional centralized Extended Kalman filter run "run_EKF.m"
+To run the data set using traditional centralized Extended Kalman filter run "run_EKF.m" then run "plot_EKF.m"
 <br />
 <br />
 The class folder has the following main classes<br />
