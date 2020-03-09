@@ -23,7 +23,8 @@ style="margin-right: 10px;"
 <br />
 5- If you run "run_event_DEKF.m" for many thresholds and would like to get a figure showing the statiscs in Figure 7 and 8 in our [paper](https://arxiv.org/pdf/1711.00493.pdf), run Generate_reports.m over the the chosen thresholds then run statisticsAll.m.
 <br />
-<--------------------------------------------------br />
+--------------------------------------------------
+<br />
 To run the data set using traditional centralized Extended Kalman filter run "run_EKF.m"
 <br />
 <br />
