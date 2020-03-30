@@ -35,7 +35,7 @@ The class folder has the following main classes<br />
 4- NetworkManager.m: distributes the measurements and the estimates between nodes <br />
 
 Under the logs folder, you can find one folder for each scenario. For example, "ped01 " contains: <br />1- mocap.cvs: The ground truth location of a flying quadrotor <br /> 2- ntbtiming.cvs: The timing frames sent between the nodes to calculate the relative distances. <br /> <br /> 
-If you use our code in academic work, please cite our [paper](https://arxiv.org/pdf/1711.00493.pdf):
+Our [paper](https://arxiv.org/pdf/1711.00493.pdf) BibTex:
 
 ```
 @inproceedings{eventtriggered,
