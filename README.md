@@ -1,10 +1,13 @@
 # Event-Triggered-Diffusion-Kalman-Filters
 
-Watch the video <br />
+The presentation of the our paper at ICCPS - CPS week 2020 can be found at this link. <br />
+[![Presentation](https://img.youtube.com/vi/u_tsOv4m5Jk/0.jpg)](https://youtu.be/u_tsOv4m5Jk)
+
+
+The next video is for localizing a Quadrotor in 9x10m lab while saving the resources by using an event-triggered algorithm. The data and the code structure can be used for testing other estimation and localization algorithms.The used algorithm is Event-Triggered Diffusion Kalman Filter. The blue rectangular is the Quadrotor real position using the Motion Capture system which is used to get the ground-truth location of the Quadrotor. The red plus is the estimated position of the Quadrotor. The ellipses are based on the diffusion error covariance matrix. The complete experimental setup is shown in our [paper](https://arxiv.org/pdf/1711.00493.pdf). <br /><br />
+
+<br />
 [![Watch the video](https://img.youtube.com/vi/IcBoE3KHGwQ/0.jpg)](https://youtu.be/IcBoE3KHGwQ)
-
-
-This video is for localizing a Quadrotor in 9x10m lab while saving the resources by using an event-triggered algorithm. The data and the code structure can be used for testing other estimation and localization algorithms.The used algorithm is Event-Triggered Diffusion Kalman Filter. The blue rectangular is the Quadrotor real position using the Motion Capture system which is used to get the ground-truth location of the Quadrotor. The red plus is the estimated position of the Quadrotor. The ellipses are based on the diffusion error covariance matrix. The complete experimental setup is shown in our [paper](https://arxiv.org/pdf/1711.00493.pdf). <br /><br />
 
 
 To regenerate the video, follow these steps:<br />
@@ -57,3 +60,5 @@ The early version of this code was in the following work in collaboration with D
   organization={ACM}
 }
 ```
+
+
