@@ -37,15 +37,17 @@ The class folder has the following main classes<br />
 4- NetworkManager.m: distributes the measurements and the estimates between nodes <br />
 
 Under the logs folder, you can find one folder for each scenario. For example, "ped01 " contains: <br />1- mocap.cvs: The ground truth location of a flying quadrotor <br /> 2- ntbtiming.cvs: The timing frames sent between the nodes to calculate the relative distances. <br /> <br /> 
-Our [paper](https://arxiv.org/pdf/1711.00493.pdf) BibTex:
+Our [paper](https://ieeexplore.ieee.org/document/9095983) ([arxiv](https://arxiv.org/pdf/1711.00493.pdf)) BibTex:
 
 ```
-@inproceedings{eventtriggered,
-    title={Event-Triggered Diffusion Kalman Filters},
-    author={Alanwar, Amr and Said, Hazem and Mehta, Ankur and Althoff, Matthias},
-    year={2020},
-    booktitle={Proceedings of the 11th ACM/IEEE International Conference on Cyber-Physical Systems},
-}
+@INPROCEEDINGS{9095983,  
+author={A. {Alanwar} and H. {Said} and A. {Mehta} and M. {Althoff}},  
+booktitle={2020 ACM/IEEE 11th International Conference on Cyber-Physical Systems (ICCPS)},   
+title={Event-Triggered Diffusion Kalman Filters},   
+year={2020},  
+volume={},  
+number={},  
+pages={206-215},}
 ```
 The early version of this code was in the following work in collaboration with Dr. Paul Martin.
 
